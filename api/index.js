@@ -42,7 +42,7 @@ Names:`;
 }
 
 
-app.post('/', (req, res) => {
+app.post('/api', (req, res) => {
 	console.log(req.body)
 	console.log(process.env.OPENAI_API_KEY)
 	// res.send("hi")
