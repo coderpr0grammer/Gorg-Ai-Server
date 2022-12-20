@@ -24,7 +24,7 @@ async function request(req) {
     model: "text-davinci-003",
 	  prompt: req.prompt,
 	  max_tokens: 256,
-	  temperature: 1,
+	  temperature: 0.25,
   });
   return { 'result': completion.data.choices[0].text };
 }
