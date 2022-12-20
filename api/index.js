@@ -41,6 +41,10 @@ Animal: ${capitalizedAnimal}
 Names:`;
 }
 
+app.get('/api', (req, res) => {
+	res.send("hi")
+	})
+
 
 app.post('/api', (req, res) => {
 	console.log(req.body)
