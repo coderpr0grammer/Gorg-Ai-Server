@@ -18,10 +18,22 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
+const dialogExample = [
+	{
+	  "speaker": "user",
+	  "text": "Hello, how are you?"
+	},
+	{
+	  "speaker": "bot",
+	  "text": "I am doing well, thank you. How can I help you today?"
+	}
+  ];
+
 async function request(req) {
 	// console.log(req)
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
+	dialog: dialogExample,
 	  prompt: req.prompt,
 	  max_tokens: 256,
 	  temperature: 0.8,
