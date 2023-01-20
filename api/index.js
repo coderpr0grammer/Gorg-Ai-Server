@@ -23,6 +23,7 @@ async function request(req) {
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
 	  prompt: req.prompt,
+	  context: 'you previously asked me how i\'m doing and introduced yourself to me',
 	  max_tokens: 256,
 	  temperature: 0.8,
   });
