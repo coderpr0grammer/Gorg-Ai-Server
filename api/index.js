@@ -33,7 +33,7 @@ async function request(req) {
 	// console.log(req)
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
-	  prompt: "this was your previous conversation with me: " + JSON.stringify(dialogExample) + ". respond to this:" + req.prompt,
+	  prompt: req.prompt,
 	  max_tokens: 256,
 	  temperature: 0.8,
   });
