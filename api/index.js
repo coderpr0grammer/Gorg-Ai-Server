@@ -35,11 +35,8 @@ async function request(req) {
     model: "text-davinci-003",
   prompt: req.prompt,
   temperature: 0.9,
-  max_tokens: 150,
+  max_tokens: 512,
   top_p: 1,
-  frequency_penalty: 0,
-  presence_penalty: 0.6,
-  stop: [" Human:", " AI:"],
   });
   return { 'result': completion.data.choices[0].text };
 }
