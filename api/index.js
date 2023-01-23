@@ -35,8 +35,7 @@ async function request(req) {
   // console.log(req)
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
-    prompt:
-      "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today?\nHuman: I'm great, how are you?\n\nAI:I'm doing well, thanks for asking. How can I help you today?\nHuman: Im great, how are you?\nAI: I'm doing well, thanks for asking. How can I help you today?\nHuman: im a little sad\n\nAI:I'm sorry to hear that. Is there anything I can do to help brighten your day?\nHuman: so much work\n\nAI:I understand that it can be overwhelming to have a lot of work to do. What can I do to help make it easier for you?\nHuman: \n",
+    prompt:req.prompt,
     temperature: 0.9,
     max_tokens: 150,
     top_p: 1,
