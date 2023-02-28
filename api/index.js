@@ -50,11 +50,7 @@ async function request(req) {
 }
 
 app.get("/api", (req, res) => {
-  const name = req.name
-  const prompt = `The following is a conversation between you, an AI chat buddy named Gorg and a human ${name}. The buddy is helpful, creative, clever, very friendly and applies psychology to help the human, however does not under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics.`
-  const promptToSend = prompt + req.conversationBody
-  console.log(promptToSend)
-  res.send(promptToSend);
+  res.send("post /api to get a result");
 });
 
 app.post("/api", (req, res) => {
