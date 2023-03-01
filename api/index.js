@@ -37,7 +37,7 @@ async function request(req) {
   const prompt = `The following is a conversation between you, an AI chat buddy named Gorg and a human ${name}. The buddy is helpful, creative, clever, very friendly and applies psychology to help the human, however does not under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics.`
   const promptToSend = prompt + req.conversationBody
   const completion = await openai.createCompletion({
-    model: "text-davinci-003",
+    model: "gpt-3.5-turbo",
     prompt: promptToSend,
     temperature: 0.9,
     max_tokens: 150,
