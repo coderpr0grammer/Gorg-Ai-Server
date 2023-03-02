@@ -98,7 +98,7 @@ app.get("/api", (req, res) => {
   let output = null;
 
 
-  request({ name: req.query.name, messages: [{role: 'user', content: req.query.prompt}] })
+  request({ name: req.query.name, messages: testMessages })
     .then((result) => {
       res.json(result);
     })
