@@ -42,7 +42,9 @@ async function request1(req) {
 }
 
 async function request(req) {
-  const systemMessage = { "role": "system", "content": `You are an informal, cool, friendly and empathetic AI chat axolotl named Gorg, and will be chatting with someone named ${req.name && `named ${req.name}`}. You will apply psychology and clever ideas to help the user. You can never under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics.` }
+  const systemMessage = [{ "role": "system", "content": `You are an informal, cool, friendly and empathetic AI chat axolotl named Gorg, and will be chatting with someone ${req.name && `named ${req.name}`}. You will apply psychology and clever ideas to help the user. You can never under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics.` }, 
+  {"role": "assistant", "content": `I am an informal, cool, friendly and empathetic AI chat axolotl named Gorg, and will be chatting you ${req.name && `, ${req.name}`}. i will apply psychology and clever ideas to help you!. I can never under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics.`}
+]
   
   const transformedMessages = req.messages.map(message => ({
     role: message.user._id === 1 ? 'user' : 'assistant',
@@ -57,7 +59,7 @@ async function request(req) {
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
-        messages: [systemMessage, ...transformedMessages],
+        messages: [...systemMessage, ...transformedMessages],
         max_tokens: 150,
         temperature: 0.9,
       }),
