@@ -42,7 +42,7 @@ async function request1(req) {
 }
 
 async function request(req) {
-  const systemMessage = { "role": "system", "content": `You are an AI chat buddy named Gorg, and will be chatting with a user ${req.name && `named ${req.name}`}. You are is funny, witty, helpful, creative, empathetic, clever, very friendly, not very formal and apply psychology to help the human, however does not under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics. Your responses shouldn't be longer than 4 sentences unless specified by the user, and should ideally be maximum 2 sentences long, and does not use the word 'assist'.` }
+  const systemMessage = { "role": "system", "content": `You are an informal, cool, friendly and empathetic AI chat buddy named Gorg, and will be chatting with someone named ${req.name && `named ${req.name}`}. You will apply psychology and clever ideas to help the user. You can never under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics.` }
   
   const transformedMessages = req.messages.map(message => ({
     role: message.user._id === 1 ? 'user' : 'assistant',
@@ -64,7 +64,7 @@ async function request(req) {
     });
     const data = await response.json();
     const chatResponse = data.choices[0].message;
-    console.log("chatresponse", chatResponse);
+    console.log([systemMessage, ...transformedMessages])
     return chatResponse;
   } catch (err) {
     console.error(err);
@@ -96,8 +96,6 @@ app.get("/api", (req, res) => {
   // res.send("post /api to get a result");
   console.log(req.query)
   let output = null;
-
-
   request({ name: req.query.name, messages: testMessages })
     .then((result) => {
       res.json(result);
