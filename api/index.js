@@ -25,12 +25,9 @@ const openai = new OpenAIApi(configuration);
 
 async function request1(req) {
   // console.log(req)
-  const name = req.name
-  const prompt = ``
-  const promptToSend = prompt + req.conversationBody
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
-    prompt: promptToSend,
+    prompt: req.prompt,
     temperature: 0.9,
     max_tokens: 150,
     top_p: 1,
