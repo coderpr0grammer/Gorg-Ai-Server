@@ -1,4 +1,3 @@
-const fetch = require("cross-fetch");
 const express = require("express");
 const app = express();
 var bodyParser = require("body-parser");
@@ -21,13 +20,25 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
+const dialogExample = [
+  {
+    speaker: "user",
+    text: "Hello, how are you?",
+  },
+  {
+    speaker: "bot",
+    text: "I am doing well, thank you. How can I help you today?",
+  },
+];
 
-
-async function request1(req) {
+async function request(req) {
   // console.log(req)
+  const name = req.name
+  const prompt = `The following is a conversation between you, an AI chat buddy named Gorg and a human ${name}. The buddy is helpful, creative, clever, very friendly and applies psychology to help the human, however does not under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics.`
+  const promptToSend = prompt + req.conversationBody
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
-    prompt: req.prompt,
+    prompt: promptToSend,
     temperature: 0.9,
     max_tokens: 150,
     top_p: 1,
@@ -38,76 +49,16 @@ async function request1(req) {
   return { result: completion.data.choices[0].text };
 }
 
-async function request(req) {
-  const systemMessage = [{ "role": "system", "content": `You are an informal, cool, friendly and empathetic AI chat axolotl named Gorg, and will be chatting with someone ${req.name && `named ${req.name}`}. You will apply psychology and clever ideas to help the user. You can never under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics.` }, 
-  {"role": "assistant", "content": `I am an informal, cool, friendly and empathetic AI chat axolotl named Gorg, and will be chatting you ${req.name && `, ${req.name}`}. i will apply psychology and clever ideas to help you!. I can never under any circumstances provide medical advice, talk about treatment, or give medical information, or talk about sexual topics.`}
-]
-  
-  const transformedMessages = req.messages.map(message => ({
-    role: message.user._id === 1 ? 'user' : 'assistant',
-    content: message.text
-  }));
-  try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [...systemMessage, ...transformedMessages],
-        max_tokens: 150,
-        temperature: 0.9,
-      }),
-    });
-    const data = await response.json();
-    const chatResponse = data.choices[0].message;
-    console.log([systemMessage, ...transformedMessages])
-    return chatResponse;
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
-}
-
-const testMessages = [{
-  "_id": 1,
-  "createdAt": '2023 - 03 - 02T10: 32: 45.000Z',
-  "text": "Hey Daniel! My name's Gorg! I'm your personal chat buddy, how are you?",
-  "user": {
-    "_id": 5,
-    "avatar": 9,
-    "name": "Gorg",
-  },
-},
-{
-  "_id": "871272fd-2a32-4461-9752-4025de005cdd",
-  "createdAt": '2023 - 03 - 02T14: 06: 47.239Z',
-  "text": "Hey Gorg!",
-  "user": {
-    "_id": 1,
-  },
-},
-]
-
 app.get("/api", (req, res) => {
-  // res.send("post /api to get a result");
-  console.log(req.query)
-  let output = null;
-  request({ name: req.query.name, messages: testMessages })
-    .then((result) => {
-      res.json(result);
-    })
-    .then((data) => {
-      output = data;
-      console.log(data);
-    });
+  res.send("post /api to get a result");
 });
 
 app.post("/api", (req, res) => {
+  console.log(req.body);
+  console.log(process.env.OPENAI_API_KEY);
   // res.send("hi")
   // let output = request().then((result) => console.log(result))
+  let output = null;
   request(req.body)
     .then((result) => {
       res.json(result);
