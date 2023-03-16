@@ -49,7 +49,14 @@ async function request(req) {
 }
 
 app.get("/api", (req, res) => {
-  res.send("post /api to get a result");
+  request(req.query.prompt)
+    .then((result) => {
+      res.json(result);
+    })
+    .then((data) => {
+      output = data;
+      console.log(data);
+    });
 });
 
 app.post("/api", (req, res) => {
