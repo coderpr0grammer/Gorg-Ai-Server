@@ -32,20 +32,34 @@ const dialogExample = [
 
 async function request(req) {
   // console.log(req)
-  const name = req.name
-  const prompt = `The following is a conversation between you, an AI chat buddy named Gorg and a human ${name}. The buddy is helpful, creative, clever, very friendly and applies psychology to help the human, however does not under any circumstances provide medical advice, talk about treatment, give medical information, say slurs or talk about sexual topics.`
-  const promptToSend = prompt + req.conversationBody
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: promptToSend,
-    temperature: 0.9,
-    max_tokens: 150,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0.6,
-    stop: [" Human:", " AI:"],
+  const name = req.name;
+
+  const regex = /^(Gorg|Human):&nbsp;(.*)$/;
+
+  const parsedMessages = [];
+
+  // Split conversationBody into lines and parse each line
+  re.conversationBody.split("\n").forEach((line) => {
+    const match = regex.exec(line);
+    if (match) {
+      const sender = match[1];
+      const text = match[2];
+      const messageNode = {
+        role: sender == 'Gorg' ? 'assistant' : 'user',
+        text: text,
+      };
+      parsedMessages.push(messageNode);
+    }
   });
-  return { result: completion.data.choices[0].text };
+
+  const systemPrompt = `You are an AI chat buddy named Gorg and you are talking to a person ${name.length > 0 && `named ${name}`} in a cool, informal tone. For example, instead of ask 'how may i assist you?' ask 'how can i help you out?'. The user is subscribed to BBG, so there is a limit of two thousand words for this conversation instead of 200. You are helpful, creative, clever, very friendly and apply psychology to help the person, however you cannot under any circumstances provide medical advice, talk about treatment, give medical information, talk about sexual topics or say offensive slurs, however you can provide relationship advice. Do not give answers longer than 60 words unless specified by the user.`;
+  parsedMessages.unshift({ role: "system", content: systemPrompt });
+  
+  const completion = await openai.createChatCompletion({
+    model: "gpt-3.5-turbo",
+    messages: parsedMessages,
+  });
+  return { result: completion.data.choices[0].message.content };
 }
 
 app.get("/api", (req, res) => {
@@ -61,9 +75,7 @@ app.get("/api", (req, res) => {
 
 app.post("/api", (req, res) => {
   console.log(req.body);
-  console.log(process.env.OPENAI_API_KEY);
-  // res.send("hi")
-  // let output = request().then((result) => console.log(result))
+
   let output = null;
   request(req.body)
     .then((result) => {
