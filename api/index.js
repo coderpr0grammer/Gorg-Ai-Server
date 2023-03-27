@@ -58,7 +58,7 @@ async function request(req) {
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
     messages: parsedMessages,
-    max_tokens: 100,
+    max_tokens: 50,
     temperature: 0.4
 
   });
