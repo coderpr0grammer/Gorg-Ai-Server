@@ -79,15 +79,16 @@ app.get("/api", (req, res) => {
 app.post("/api", (req, res) => {
   console.log(req.body);
 
-  let output = null;
-  request(req.body)
-    .then((result) => {
-      res.json(result);
-    })
-    .then((data) => {
-      output = data;
-      console.log(data);
-    });
+  // let output = null;
+  // request(req.body)
+  //   .then((result) => {
+  //     res.json(result);
+  //   })
+  //   .then((data) => {
+  //     output = data;
+  //     console.log(data);
+  //   });
+  res.json({result: 'Sorry, this version of Gorg is outdated! Head over to the App Store and search for "Gorg" in order to update it and continue chatting with me :)'})
 });
 
 app.listen(port, () => {
